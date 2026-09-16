@@ -25,7 +25,7 @@ function SearchForm({ value, onChange, onSubmit }) {
   };
 
   return (
-    <div className="w-full bg-white rounded-xl border border-gray-200 shadow-sm p-4 sm:p-6">
+    <div className="w-full bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700/80 shadow-sm p-4 sm:p-6 transition-colors duration-200">
       <form onSubmit={handleSubmit} role="search" className="flex flex-col sm:flex-row gap-3">
         <label htmlFor="search-input" className="sr-only">
           GitHub username
@@ -36,13 +36,13 @@ function SearchForm({ value, onChange, onSubmit }) {
           value={currentValue}
           onChange={handleChange}
           placeholder="Enter GitHub username..."
-          className="flex-1 px-4 py-2.5 sm:py-3 text-sm sm:text-base text-gray-900 placeholder:text-gray-400 bg-white rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-colors"
+          className="flex-1 px-4 py-2.5 sm:py-3 text-sm sm:text-base text-gray-900 dark:text-slate-100 placeholder:text-gray-400 dark:placeholder:text-slate-500 bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 dark:focus:border-emerald-400 transition-colors duration-200"
           autoComplete="off"
           spellCheck="false"
         />
         <button
           type="submit"
-          className="inline-flex items-center justify-center gap-2 px-6 py-2.5 sm:py-3 text-sm sm:text-base font-medium text-white bg-emerald-500 hover:bg-emerald-600 active:bg-emerald-700 rounded-lg transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-emerald-500/40 shrink-0"
+          className="inline-flex items-center justify-center gap-2 px-6 py-2.5 sm:py-3 text-sm sm:text-base font-medium text-white bg-emerald-500 hover:bg-emerald-600 active:bg-emerald-700 dark:bg-emerald-600 dark:hover:bg-emerald-500 rounded-lg transition-colors duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-emerald-500/40 shrink-0"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
