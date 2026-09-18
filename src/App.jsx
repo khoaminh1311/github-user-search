@@ -29,7 +29,7 @@ function AppContent() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 text-gray-900 dark:text-slate-100 flex flex-col font-sans transition-colors duration-200">
+    <div className="min-h-screen flex flex-col font-sans">
       <Header />
       <main className="w-full max-w-3xl mx-auto px-4 py-8 sm:py-10 flex flex-col gap-6 flex-1">
         <SearchForm

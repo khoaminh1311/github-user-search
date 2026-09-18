@@ -36,7 +36,7 @@ function SearchForm({ value, onChange, onSubmit }) {
           value={currentValue}
           onChange={handleChange}
           placeholder="Enter GitHub username..."
-          className="flex-1 px-4 py-2.5 sm:py-3 text-sm sm:text-base text-gray-900 dark:text-slate-100 placeholder:text-gray-400 dark:placeholder:text-slate-500 bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 dark:focus:border-emerald-400 transition-colors duration-200"
+          className="flex-1 min-w-0 px-4 py-2.5 sm:py-3 text-sm sm:text-base text-gray-900 dark:text-slate-100 placeholder:text-gray-400 dark:placeholder:text-slate-500 bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 dark:focus:border-emerald-400 transition-colors duration-200"
           autoComplete="off"
           spellCheck="false"
         />
