@@ -49,6 +49,12 @@ export function useGithubUser() {
       }
 
       const data = await response.json();
+      
+      // Ignore if a newer search was initiated
+      if (lastSearchedRef.current !== trimmedUsername) {
+        return;
+      }
+      
       setUser(data);
       setStatus('success');
     } catch (err) {
@@ -56,7 +62,11 @@ export function useGithubUser() {
         // Ignored because request was aborted intentionally
         return;
       }
-      setError(err.message || 'An error occurred');
+      if (err instanceof SyntaxError) {
+        setError('Received an invalid response from the server.');
+      } else {
+        setError(err.message || 'An error occurred');
+      }
       setStatus('error');
       setUser(null);
     }
