@@ -12,6 +12,7 @@ Xây dựng một single-page web app cho phép người dùng tìm kiếm thôn
 - Không dùng Redux, Zustand, React Query, UI framework, icon library, date library hay backend.
 - Theme global bắt buộc dùng React Context (`useContext`), lưu preference vào `localStorage`.
 - Các custom hook bắt buộc: `useDebounce` và `useGithubUser`.
+- QA là scope bắt buộc. Được phép thêm dev dependencies chỉ cho testing: Vitest, jsdom, React Testing Library, user-event, jest-dom và @sa11y/vitest. Không dùng MSW; mock native Fetch bằng Vitest để giữ setup nhẹ.
 
 ## 3. Chức năng bắt buộc
 
@@ -99,7 +100,40 @@ src/
 
 Không cần tạo router, services layer, types, global store hay folder architecture phức tạp.
 
-## 7. Git workflow
+Khi đến QA phase, thêm test files riêng cạnh source file và một shared setup file:
+
+```text
+src/
+├── test/setup.js
+├── components/
+│   ├── SearchForm.test.jsx
+│   ├── ThemeToggle.test.jsx
+│   └── UserCard.test.jsx
+├── context/ThemeContext.test.jsx
+├── hooks/
+│   ├── useDebounce.test.js
+│   └── useGithubUser.test.js
+└── utils/formatJoinedDate.test.js
+```
+
+Không tạo một file test monolithic. `src/test/setup.js` chỉ chứa setup chung (cleanup, matchers, mock reset); mỗi `.test.*` chỉ test một component, hook hoặc utility rõ ràng.
+
+## 7. Testing and quality gate
+
+Trước deployment, project phải có một QA phase riêng. Test suite phải bao phủ happy path, edge cases, invalid input, corrupted state, storage failure, accessibility, hidden assumptions và regression.
+
+Cần có cả unit/component tests và checklist kiểm thử thủ công. Browser APIs (Fetch, AbortController, localStorage) phải được mock và restore giữa các test. Test không được gọi GitHub API thật.
+
+Case tối thiểu:
+
+- Input rỗng/chỉ có khoảng trắng, username có ký tự cần encode, submit bằng Enter/button, debounce và submit không tạo request trùng.
+- Success, 404, network failure, 403/429 rate limit, JSON response lỗi và request cũ bị abort.
+- Bio/name null, ngày invalid, response thiếu field và avatar URL không làm app crash.
+- localStorage rỗng, giá trị theme sai, getItem/setItem ném lỗi và DOM class `dark` vẫn nhất quán.
+- Keyboard-only navigation, visible focus, label accessible, button có accessible name, icon decorative không được đọc, heading/landmark hợp lý và automated accessibility scan.
+- Regression: theme persistence, response cũ không ghi đè query mới, mọi test độc lập và lint/build/test đều pass.
+
+## 8. Git workflow
 
 - `main` là production; không commit trực tiếp vào `main`.
 - Mỗi agent chỉ làm trên branch được giao và chỉ sửa phạm vi của phase đó.
@@ -107,14 +141,22 @@ Không cần tạo router, services layer, types, global store hay folder archit
 - Mở Pull Request vào `main`; Vercel Preview và lint/build cần pass trước khi merge.
 - Không sửa hoặc revert thay đổi ngoài phạm vi được giao.
 
-## 8. Non-goals (tránh scope creep)
+## 9. Visual and responsive quality gate
+
+Sau functional QA và trước release, phải có một visual/responsive QA phase riêng. So sánh UI với hai mockup light/dark ban đầu; không cần pixel-perfect, nhưng phải giữ đúng hierarchy, layout và cảm giác thị giác.
+
+Viewport tối thiểu cần kiểm tra: 320px, 375px, 768px, 1024px và 1440px. Kiểm tra cả light/dark cho welcome, loading, error và user-card states. Không được có horizontal overflow, text cut-off, overlapping controls, touch target quá nhỏ, focus ring bị cắt hoặc thay đổi layout gây nhảy khó chịu.
+
+Phase này chỉ sửa CSS/markup/accessibility nhỏ khi cần; không thêm feature, animation library hay dependency.
+
+## 10. Non-goals (tránh scope creep)
 
 - Không hiện danh sách repositories, followers, following hay organizations.
 - Không authentication/OAuth/token và không backend proxy.
 - Không favorites, history, database, pagination, router, SSR/Next.js.
 - Không state-management library, cache layer, UI framework hay animation library.
-- Không thêm test framework trong phạm vi hiện tại; dùng checklist kiểm thử thủ công.
+- Không thêm end-to-end browser automation, visual-regression SaaS hay coverage target phức tạp; Vitest component/unit tests và manual QA là đủ cho project học tập này.
 
-## 9. Tiêu chí hoàn thành
+## 11. Tiêu chí hoàn thành
 
-App tìm được GitHub user, hiện đủ thông tin yêu cầu, xử lý đúng welcome/loading/404/network/rate-limit states, có persisted dark/light theme, responsive, lint/build thành công, đã merge qua PR vào `main`, và có deployment Vercel hoạt động.
+App tìm được GitHub user, hiện đủ thông tin yêu cầu, xử lý đúng welcome/loading/404/network/rate-limit states, có persisted dark/light theme, responsive, test suite/lint/build thành công, đã merge qua PR vào `main`, và có deployment Vercel hoạt động.
