@@ -7,7 +7,7 @@ function ThemeToggle() {
     <button
       type="button"
       onClick={toggleTheme}
-      className="p-2 rounded-lg border border-gray-200 dark:border-slate-700 text-gray-600 dark:text-slate-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100/80 dark:hover:bg-slate-700/60 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/40 cursor-pointer"
+      className="p-2 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg border border-gray-200 dark:border-slate-700 text-gray-600 dark:text-slate-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100/80 dark:hover:bg-slate-700/60 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/40 cursor-pointer"
       aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
     >
       {theme === 'dark' ? (
