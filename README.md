@@ -49,28 +49,3 @@ npm run test
 npm run test:watch
 ```
 
-### Test Coverage Areas
-
-- **Happy path**: search valid user, verify all UserCard fields render
-- **Input validation**: empty/whitespace input, URL encoding, debounce timing
-- **API edge cases**: 404, network failure, 403/429 rate-limit, JSON parse failure, race conditions
-- **Data edge cases**: null name/bio fallbacks, zero stats, invalid date, missing optional fields
-- **Theme**: default light, saved dark, invalid value fallback, localStorage error recovery
-- **Accessibility**: labeling, ARIA, landmarks, keyboard, focus
-
-### Manual QA Checklist
-
-The following must be verified by a human reviewer before merging to production:
-
-| # | Check |
-|---|-------|
-| 1 | Tab order: Header → Search input → Search button via Tab key |
-| 2 | Visible focus indicator on all interactive elements (light & dark mode) |
-| 3 | Mobile viewport (375px): UserCard layout adapts correctly |
-| 4 | Color contrast ≥ 4.5:1 in light mode |
-| 5 | Color contrast ≥ 4.5:1 in dark mode |
-| 6 | Screen reader announces search results after submit |
-| 7 | On throttled (3G) network: loading spinner is visible |
-| 8 | Enter key submits the form without clicking Search button |
-| 9 | Dark mode persists after page refresh |
-| 10 | Rate-limit error shows distinct message from "No results found" |
