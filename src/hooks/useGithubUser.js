@@ -1,12 +1,21 @@
 import { useState, useRef, useCallback } from 'react';
+import { fetchGithubUser } from '../services/githubApi';
+import { STATUS } from '../utils/constants';
 
 export function useGithubUser() {
-  const [status, setStatus] = useState('idle'); // 'idle' | 'loading' | 'success' | 'error'
+  const [status, setStatus] = useState(STATUS.IDLE);
   const [user, setUser] = useState(null);
   const [error, setError] = useState(null);
   
   const abortControllerRef = useRef(null);
   const lastSearchedRef = useRef('');
+
+  const resetUser = useCallback(() => {
+    setStatus(STATUS.IDLE);
+    setUser(null);
+    setError(null);
+    lastSearchedRef.current = '';
+  }, []);
 
   const fetchUser = useCallback(async (username) => {
     const trimmedUsername = username?.trim();
@@ -26,29 +35,11 @@ export function useGithubUser() {
     abortControllerRef.current = abortController;
     lastSearchedRef.current = trimmedUsername;
 
-    setStatus('loading');
+    setStatus(STATUS.LOADING);
     setError(null);
 
     try {
-      const encodedUsername = encodeURIComponent(trimmedUsername);
-      const response = await fetch(`https://api.github.com/users/${encodedUsername}`, {
-        headers: {
-          'Accept': 'application/vnd.github+json'
-        },
-        signal: abortController.signal
-      });
-
-      if (!response.ok) {
-        if (response.status === 404) {
-          throw new Error('No results found');
-        } else if (response.status === 403 || response.status === 429) {
-          throw new Error('API rate limit exceeded');
-        } else {
-          throw new Error('An error occurred while fetching user data');
-        }
-      }
-
-      const data = await response.json();
+      const data = await fetchGithubUser(trimmedUsername, abortController.signal);
       
       // Ignore if a newer search was initiated
       if (lastSearchedRef.current !== trimmedUsername) {
@@ -56,7 +47,7 @@ export function useGithubUser() {
       }
       
       setUser(data);
-      setStatus('success');
+      setStatus(STATUS.SUCCESS);
     } catch (err) {
       if (err.name === 'AbortError') {
         // Ignored because request was aborted intentionally
@@ -67,10 +58,11 @@ export function useGithubUser() {
       } else {
         setError(err.message || 'An error occurred');
       }
-      setStatus('error');
+      setStatus(STATUS.ERROR);
       setUser(null);
+      lastSearchedRef.current = ''; // Allow retry on failure
     }
   }, []);
 
-  return { user, status, error, fetchUser };
+  return { user, status, error, fetchUser, resetUser };
 }

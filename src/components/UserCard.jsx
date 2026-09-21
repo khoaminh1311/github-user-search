@@ -32,7 +32,7 @@ export default function UserCard({ user }) {
             <a
               href={user.html_url || `https://github.com/${user.login}`}
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
               className="text-blue-500 hover:underline mb-1 truncate"
               title={`@${user.login}`}
             >
