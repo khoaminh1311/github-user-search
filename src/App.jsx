@@ -17,8 +17,9 @@ function AppContent() {
 
   // Auto-search when user stops typing
   useEffect(() => {
-    if (debouncedUsername) {
-      fetchUser(debouncedUsername);
+    const trimmed = debouncedUsername?.trim();
+    if (trimmed) {
+      fetchUser(trimmed);
     } else {
       resetUser();
     }
@@ -26,8 +27,11 @@ function AppContent() {
 
   // Immediate search on submit
   const handleSearch = (term) => {
-    if (term) {
-      fetchUser(term);
+    const trimmed = term?.trim();
+    if (trimmed) {
+      fetchUser(trimmed);
+    } else {
+      resetUser();
     }
   };
 
